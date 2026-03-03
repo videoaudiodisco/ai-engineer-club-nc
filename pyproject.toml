@@ -1,13 +1,15 @@
 [project]
-name = "ai-engineer-club-assignment"
+name = "ai-engineer-club-nc"
 version = "0.1.0"
 description = "AI Engineer Club Assignment"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "openai>=1.98.0",
+    "openai-agents>=0.10.3",
     "python-dotenv>=1.2.1",
     "requests>=2.32.5",
+    "streamlit>=1.54.0",
 ]
 
 [dependency-groups]
