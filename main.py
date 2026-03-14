@@ -58,6 +58,7 @@ You are the Lead Guest Relations Agent for [Restaurant Name]...
 @input_guardrail
 async def off_topic_guardrail(
     wrapper,
+    agent,
     input: str,  # 사용자의 질문
 ):
     result = await Runner.run(
