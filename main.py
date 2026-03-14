@@ -226,9 +226,9 @@ async def run_agent(message):
         except InputGuardrailTripwireTriggered:
             st.write("I can't help you with that")
 
-        # except OutputGuardrailTripwireTriggered:
-        #     st.write("I can't show you that answer")
-        #     st.session_state["text_placeholder"].empty()
+        except OutputGuardrailTripwireTriggered:
+            st.write("I can't show you that answer")
+            st.session_state["text_placeholder"].empty()
 
 
 message = st.chat_input(

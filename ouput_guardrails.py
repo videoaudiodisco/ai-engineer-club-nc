@@ -36,7 +36,9 @@ async def output_guardrail_function(
 
     validation = result.final_output
 
-    triggered = validation.polite_and_professional or validation.no_inside_information
+    triggered = (
+        not validation.polite_and_professional or not validation.no_inside_information
+    )
 
     return GuardrailFunctionOutput(
         output_info=validation,
