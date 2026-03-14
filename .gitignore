@@ -13,3 +13,5 @@ wheels/
 *.db
 *.db-shm
 *.db-wal
+
+.streamlit/
