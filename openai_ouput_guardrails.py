@@ -5,7 +5,7 @@ from agents import (
     RunContextWrapper,
     GuardrailFunctionOutput,
 )
-from models import OutputGuardRailOutput
+from openai_models import OutputGuardRailOutput
 
 output_guardrail_agent = Agent(
     name="Output Guardrail Agent",

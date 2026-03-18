@@ -8,7 +8,7 @@ from agents import (
     handoff,
 )
 
-from models import HandoffData
+from openai_models import HandoffData
 
 from agents.extensions.handoff_prompt import RECOMMENDED_PROMPT_PREFIX
 from agents.extensions import handoff_filters

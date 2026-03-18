@@ -20,7 +20,7 @@ from restaurant_agent.complaint_agent import complaint_agent
 
 # from restaurant_agent.triage_agent import triage_agent
 
-from models import HandoffData, InputGuardRailOutput
+from openai_models import HandoffData, InputGuardRailOutput
 import dotenv
 
 dotenv.load_dotenv()
