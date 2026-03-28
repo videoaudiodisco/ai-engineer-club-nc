@@ -17,6 +17,8 @@ dependencies = [
     "langgraph>=0.6.7",
     "langgraph-cli[inmem]>=0.4.2",
     "langsmith>=0.4.28",
+    "langchain-community>=0.3.0", 
+    "tavily-python>=0.5.0",       
 ]
 
 [dependency-groups]
