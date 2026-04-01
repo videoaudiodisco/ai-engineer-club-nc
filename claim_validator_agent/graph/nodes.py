@@ -7,7 +7,10 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-llm = ChatOpenAI(model="gpt-4o", temperature=0.2)
+
+def get_llm():
+    """Lazy initialization: Only connects to OpenAI when needed."""
+    return ChatOpenAI(model="gpt-4o", temperature=0.2)
 
 
 def supervisor_node(state: SocraticState):
@@ -23,6 +26,7 @@ def supervisor_node(state: SocraticState):
         "2. A Socratic counter-argument to test the logic.\n"
         "3. A review of the historical, ethical, and social implications."
     )
+    llm = get_llm()  # Initialize here
     response = llm.invoke([SystemMessage(content=prompt)])
     return {"messages": [response]}
 
@@ -32,6 +36,7 @@ def support_agent_node(state: SocraticState):
         content="You are a meticulous Fact-Checker. Provide empirical data, "
         "academic consensus, and statistics to support the user's claim."
     )
+    llm = get_llm()  # Initialize here
     response = llm.invoke([prompt] + state["messages"])
     return {"messages": [response]}
 
@@ -42,6 +47,7 @@ def socratic_agent_node(state: SocraticState):
         "Identify logical fallacies, edge cases, and counter-evidence "
         "to constructively challenge the user's claim."
     )
+    llm = get_llm()  # Initialize here
     response = llm.invoke([prompt] + state["messages"])
     return {"messages": [response]}
 
@@ -52,5 +58,6 @@ def contextual_agent_node(state: SocraticState):
         "historical, and ethical implications of the user's claim. "
         "Do not strictly support or deny; instead, widen the perspective."
     )
+    llm = get_llm()  # Initialize here
     response = llm.invoke([prompt] + state["messages"])
     return {"messages": [response]}
