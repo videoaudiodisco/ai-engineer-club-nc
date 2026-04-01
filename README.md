@@ -1,64 +1,59 @@
-## Socratic Synthesizer: Deep Research & Critical Thinking Agent
+# Claim Validator Agent
 
-This project implements a multi-agent system designed to analyze claims through a rigorous Socratic lens. It moves beyond simple prompt-response cycles by employing an adversarial architecture that supports, challenges, and finally synthesizes information to provide a balanced, high-depth analysis report.
+A stateful, multi-agent system designed to provide deep-dive analysis of user-submitted claims. Built with **LangGraph** and **Streamlit**, it utilizes a **Human-in-the-Loop (HITL)** architecture to allow users to choose the specific "analytical lens" they want to apply to their claim.
 
-### 🏗 Architecture & Workflow
+## 🚀 Overview
 
-The system is built using **LangGraph**, enabling a stateful, cyclic directed acyclic graph (DAG) that manages the flow of information between specialized nodes.
+Standard AI responses often lean toward a single perspective. This system breaks that mold by employing a **Supervisor-specialist** architecture. It pauses execution after an initial review, handing control back to the human to decide whether to prioritize empirical data, logical rigor, or ethical context.
 
-1.  **Validator Node (Conditional Gatekeeper)**:
-    - Uses structured output to assess if the user's input is a researchable claim.
-    - **Conditional Edge**: If the claim is valid, it proceeds to research; otherwise, it terminates early to save tokens and latency.
-2.  **Research Node (Support)**:
-    - Integrated with the **Tavily Search Tool** to gather real-time, evidence-based data.
-    - Constructs the strongest possible defense for the claim using logical frameworks.
-3.  **Socratic Node (Adversarial)**:
-    - Acts as the "Devil's Advocate".
-    - Scrutinizes the research for logical fallacies, identifies blind spots, and presents strong counter-arguments.
-4.  **Synthesis Node (Moderator)**:
-    - Integrates both the defense and the critique.
-    - Produces a final "State of the Debate" report featuring an executive summary and a nuanced middle-ground perspective.
+## 🧠 Architecture
 
----
+The system is built as a **Directed Acyclic Graph (DAG)** using LangGraph:
 
-### 🚀 Key Features
+1.  **Supervisor Node**: Interprets the user's claim and prepares the system for specialized routing.
+2.  **Router Node (The "Pause")**: The graph is compiled with an `interrupt_before` directive. This stops the AI mid-flow, allowing the user to make a choice.
+3.  **Specialized Specialists**:
+    - **Fact-Checker**: Provides empirical data and academic consensus.
+    - **Socratic Agent**: Acts as a "Devil's Advocate" to find logical fallacies.
+    - **Contextual Reviewer**: Investigates historical, social, and ethical implications.
 
-- **Real-world Grounding**: Leverages Tavily Search to prevent model hallucinations and ensure data is current.
-- **State Management**: Utilizes `TypedDict` and `operator.add` to maintain a robust record of the reasoning process and message history.
-- **Production-Ready Logic**: Includes a validation step to handle nonsensical inputs and uses high-reasoning models (GPT-4o) for complex synthesis.
-- **Type Safety**: Employs Pydantic schemas for structured LLM outputs, ensuring reliable routing within the graph.
+## 🛠 Features
 
-### 🛠 Tech Stack
+- **Stateful Memory**: Uses `MemorySaver` to track conversation threads across multiple interactions.
+- **Human-in-the-Loop**: Seamlessly integrates human decision-making into the agentic workflow.
+- **Resilient UI**: Streamlit-based interface with localized error handling to prevent "white-screen" crashes.
+- **Modular Design**: Specialized agent prompts are decoupled from the graph logic for easy tuning.
 
-- **Orchestration**: LangGraph
-- **LLM**: OpenAI GPT-4o
-- **Tools**: Tavily Search API
-- **Language**: Python 3.10+
+## 🔧 Installation
 
----
+1.  **Clone the Repository**:
 
-### 📋 Prerequisites
+    ```bash
+    git clone <your-repo-url>
+    cd claim_validator_agent
+    ```
 
-```bash
-pip install langgraph langchain_openai langchain_community tavily-python
-```
+2.  **Install Dependencies**:
 
-### 🚦 Quick Start
+    ```bash
+    pip install langgraph langchain_openai streamlit python-dotenv
+    ```
 
-1. Set your environment variables:
-   ```bash
-   export OPENAI_API_KEY='your-api-key'
-   export TAVILY_API_KEY='your-tavily-key'
-   ```
-2. Run the graph:
+3.  **Environment Setup**:
+    Create a `.env` file in the root:
 
-   ```python
-   # Initialize the state
-   initial_state = {"user_claim": "Universal Basic Income is necessary due to AI automation."}
+    ```env
+    OPENAI_API_KEY=your_openai_api_key_here
+    ```
 
-   # Execute the workflow
-   final_output = app.invoke(initial_state)
-   print(final_output['final_report'])
-   ```
+4.  **Run the Application**:
+    ```bash
+    streamlit run app.py
+    ```
 
-Would you like me to add a **human-in-the-loop** interruption after the Socratic critique so you can provide your own feedback before the final synthesis?
+## 📖 How to Use
+
+1.  **Enter a Claim**: Type a statement like "Nuclear energy is the only path to zero emissions."
+2.  **Wait for Supervisor**: The Supervisor will acknowledge the claim.
+3.  **Select Lens**: Click one of the three buttons (**Fact Check**, **Socratic**, or **Contextual**) to route the claim to the specific agent.
+4.  **Review**: Read the detailed analysis generated by the specialist.
