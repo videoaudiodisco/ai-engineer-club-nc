@@ -1,7 +1,7 @@
 import streamlit as st
 import uuid
 from langchain_core.messages import HumanMessage
-from graph.builder import create_multi_agent_graph
+from claim_validator_agent.graph.builder import create_multi_agent_graph
 
 st.set_page_config(page_title="Multi-Agent Synthesizer", layout="centered")
 
