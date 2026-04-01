@@ -32,7 +32,7 @@ try:
 
     config = {"configurable": {"thread_id": st.session_state.thread_id}}
 
-    st.title("Socratic Synthesizer")
+    st.title("Claim Validator")
 
     # --- 3. UI INPUT ---
     # By setting key="claim_input_widget", we can control the text directly from the callback.
