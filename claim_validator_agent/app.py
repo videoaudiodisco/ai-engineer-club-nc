@@ -55,6 +55,7 @@ try:
         try:
             current_state = st.session_state.agent.get_state(config)
 
+            # 1. Initial invocation (supervisor review)
             if not current_state.values:
                 with st.spinner("Supervisor is reviewing the claim..."):
                     initial_state = {
@@ -68,11 +69,19 @@ try:
 
             current_state = st.session_state.agent.get_state(config)
 
+            # 2. Waiting at the Router Node (Interrupt State)
             if current_state.next == ("router_node",):
-                last_message = current_state.values["messages"][-1].content
-                st.info(f"**Supervisor:** {last_message}")
+                messages = current_state.values.get("messages", [])
 
-                st.write("### Choose your analytical lens:")
+                # Distinguish between initial Supervisor prompt and Agent outputs
+                if len(messages) > 2:
+                    st.success("Analysis Complete!")
+                    st.markdown(messages[-1].content)
+                    st.divider()
+                else:
+                    st.info(f"**Supervisor:** {messages[-1].content}")
+
+                st.write("### Choose your analytical lens (You can run multiple!):")
                 col1, col2, col3 = st.columns(3)
 
                 chosen_path = None
@@ -82,6 +91,9 @@ try:
                     chosen_path = "socratic"
                 if col3.button("🌍 Contextual"):
                     chosen_path = "contextual"
+
+                # New: Keep the reset button permanently available in this state
+                st.button("🔄 Start New Analysis", on_click=reset_analysis)
 
                 if chosen_path:
                     st.session_state.agent.update_state(
@@ -94,14 +106,9 @@ try:
                         },
                         as_node="supervisor",
                     )
-                    with st.spinner("Agent is performing deep analysis..."):
+                    with st.spinner(f"Agent is performing {chosen_path} analysis..."):
                         st.session_state.agent.invoke(None, config)
                     st.rerun()
-
-            elif not current_state.next and current_state.values:
-                st.success("Analysis Complete!")
-                st.markdown(current_state.values["messages"][-1].content)
-                st.button("Start New Analysis", on_click=reset_analysis)
 
         except Exception as e:
             st.error(f"⚠️ An error occurred during the graph execution.")
@@ -109,6 +116,7 @@ try:
                 st.code(str(e))
             if st.button("Retry"):
                 st.rerun()
+
 
 except Exception as e:
     st.error("The application encountered a critical startup error.")

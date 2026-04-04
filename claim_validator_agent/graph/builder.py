@@ -34,6 +34,9 @@ def create_multi_agent_graph():
 
     workflow.add_edge(START, "supervisor")
     workflow.add_edge("supervisor", "router_node")
+    workflow.add_edge("support_agent", "router_node")
+    workflow.add_edge("socratic_agent", "router_node")
+    workflow.add_edge("contextual_agent", "router_node")
 
     # FIX 2: Explicitly map the routing paths
     workflow.add_conditional_edges(
